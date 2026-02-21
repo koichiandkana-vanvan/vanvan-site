@@ -6,26 +6,25 @@
     <title>VanVan — Timeless Elegance</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --color-bg: #0a0a0a;
             --color-text: #e8e8e8;
             --color-text-muted: #888888;
             --color-accent: #d4af37;
+            --color-accent-dim: rgba(212, 175, 55, 0.15);
             --color-border: #1a1a1a;
             --font-display: 'Cormorant Garamond', serif;
             --font-body: 'Montserrat', sans-serif;
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: var(--font-body);
             background: var(--color-bg);
@@ -33,52 +32,72 @@
             line-height: 1.6;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            cursor: none;
         }
-        
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        /* ── Custom Cursor ── */
+        #cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        #cursor-ring {
+            position: fixed;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.12s ease-out, width 0.3s, height 0.3s, opacity 0.3s, border-color 0.3s;
         }
-        
-        @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
+        body:has(a:hover) #cursor-ring,
+        body:has(button:hover) #cursor-ring,
+        body:has(.gallery-item:hover) #cursor-ring {
+            width: 60px;
+            height: 60px;
+            border-color: var(--color-accent);
         }
-        
-        .animate-in {
-            animation: fadeInUp 1s ease-out forwards;
-            opacity: 0;
+
+        /* ── Scroll Progress ── */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-accent), #fff8dc, var(--color-accent));
+            z-index: 200;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
         }
-        
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
-        .delay-4 { animation-delay: 0.8s; }
-        
-        /* Header */
+
+        /* ── Header ── */
         header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            padding: 2rem 5%;
-            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.95), transparent);
-            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.4s, padding 0.4s;
         }
-        
+        header.scrolled {
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(16px);
+            padding: 1rem 5%;
+            border-bottom: 1px solid var(--color-border);
+        }
         .logo {
             font-family: var(--font-display);
             font-size: 1.5rem;
@@ -86,9 +105,41 @@
             letter-spacing: 0.3em;
             color: var(--color-text);
             text-transform: uppercase;
+            text-decoration: none;
+            cursor: none;
         }
-        
-        /* Hero Section */
+        nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        nav a {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            font-weight: 300;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            cursor: none;
+            position: relative;
+            transition: color 0.3s;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+        nav a:hover { color: var(--color-accent); }
+        nav a:hover::after { width: 100%; }
+
+        @media (max-width: 768px) { nav { display: none; } }
+
+        /* ── Hero ── */
         .hero {
             position: relative;
             height: 100vh;
@@ -97,208 +148,332 @@
             justify-content: center;
             overflow: hidden;
         }
-        
-        .hero-bg {
+        .hero-video {
             position: absolute;
             inset: 0;
-            object-fit: cover;
             width: 100%;
             height: 100%;
-            filter: brightness(0.4) contrast(1.1);
+            object-fit: cover;
+            filter: brightness(0.35) contrast(1.1);
+            transform-origin: center;
+            will-change: transform;
         }
-        
-        .hero-bg::after {
-            content: '';
+        .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, transparent 0%, rgba(10, 10, 10, 0.8) 100%);
+            background:
+                radial-gradient(ellipse at center, transparent 30%, rgba(10,10,10,0.6) 100%),
+                linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.7) 100%);
         }
-        
+        #hero-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
         .hero-content {
             position: relative;
             z-index: 2;
             text-align: center;
             padding: 0 5%;
+            will-change: transform;
         }
-        
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: clamp(4rem, 12vw, 10rem);
+        .hero-eyebrow {
+            font-size: 0.65rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--color-accent);
             font-weight: 300;
-            letter-spacing: 0.15em;
             margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #ffffff 0%, var(--color-accent) 50%, #ffffff 100%);
-            background-size: 200% auto;
+            opacity: 0;
+            animation: fadeInDown 1s ease-out 0.5s forwards;
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(5rem, 14vw, 12rem);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            line-height: 1;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+        .hero-title .char {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffffff 0%, var(--color-accent) 40%, #fff8dc 60%, #ffffff 100%);
+            background-size: 300% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: shimmer 8s linear infinite;
+            opacity: 0;
+            transform: translateY(80px) rotateX(40deg);
+            animation: charReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-play-state: paused;
         }
-        
+        .hero-title.animate .char { animation-play-state: running; }
+
+        @keyframes charReveal {
+            to { opacity: 1; transform: translateY(0) rotateX(0); }
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            margin: 0 auto 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.5s forwards;
+        }
         .hero-subtitle {
-            font-size: clamp(0.875rem, 2vw, 1.125rem);
+            font-size: clamp(0.75rem, 1.5vw, 0.9rem);
             font-weight: 200;
-            letter-spacing: 0.4em;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.8s forwards;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2.5s forwards;
+        }
+        .scroll-indicator span {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
             color: var(--color-text-muted);
         }
-        
-        /* Section Base */
+        .scroll-line {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, var(--color-accent), transparent);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+            50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+            51% { transform: scaleY(1); transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Reveal on scroll ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Section base ── */
         section {
-            padding: clamp(5rem, 15vh, 12rem) 5%;
+            padding: clamp(5rem, 12vh, 10rem) 5%;
             border-top: 1px solid var(--color-border);
         }
-        
+        .section-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
         .section-title {
             font-family: var(--font-display);
             font-size: clamp(2.5rem, 6vw, 4.5rem);
             font-weight: 300;
-            letter-spacing: 0.1em;
-            margin-bottom: 4rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
             text-align: center;
-            color: var(--color-accent);
+            color: var(--color-text);
         }
-        
-        /* Profile Section */
-        .profile {
-            max-width: 800px;
-            margin: 0 auto;
+        .section-line {
+            width: 40px;
+            height: 1px;
+            background: var(--color-accent);
+            margin: 0 auto 4rem;
         }
-        
+
+        /* ── Profile ── */
         .profile-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
         }
-        
         .profile-item {
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem 1.5rem;
             border: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
             transition: var(--transition);
+            cursor: none;
         }
-        
+        .profile-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--color-accent-dim), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
         .profile-item:hover {
             border-color: var(--color-accent);
-            transform: translateY(-5px);
+            transform: translateY(-6px);
         }
-        
+        .profile-item:hover::before { opacity: 1; }
         .profile-label {
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
             text-transform: uppercase;
-            color: var(--color-text-muted);
-            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            font-weight: 300;
         }
-        
         .profile-value {
             font-family: var(--font-display);
-            font-size: 1.75rem;
+            font-size: 1.8rem;
             font-weight: 300;
             color: var(--color-text);
         }
-        
-        /* Gallery Section */
+
+        /* ── Gallery ── */
         .gallery {
-            background: linear-gradient(to bottom, var(--color-bg) 0%, #0f0f0f 50%, var(--color-bg) 100%);
+            background: linear-gradient(to bottom, var(--color-bg) 0%, #0d0d0d 50%, var(--color-bg) 100%);
         }
-        
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
-        
+        @media (max-width: 768px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .gallery-grid { grid-template-columns: 1fr; }
+        }
         .gallery-item {
             position: relative;
             aspect-ratio: 1;
             overflow: hidden;
-            cursor: pointer;
+            cursor: none;
             border: 1px solid var(--color-border);
-            transition: var(--transition);
+            transform-style: preserve-3d;
+            transition: border-color 0.4s, box-shadow 0.4s;
         }
-        
         .gallery-item:hover {
-            border-color: var(--color-accent);
-            transform: scale(1.02);
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(212, 175, 55, 0.1);
         }
-        
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: var(--transition);
-            filter: grayscale(0.3) contrast(1.1);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+            filter: grayscale(0.2) contrast(1.1);
+            pointer-events: none;
         }
-        
         .gallery-item:hover img {
-            transform: scale(1.1);
+            transform: scale(1.08);
             filter: grayscale(0) contrast(1.15);
         }
-        
-        /* Lightbox */
+        .gallery-item-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+        .gallery-item-num {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 300;
+            color: rgba(212,175,55,0.6);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s, transform 0.4s;
+        }
+        .gallery-item:hover .gallery-item-num { opacity: 1; transform: translateY(0); }
+
+        /* ── Lightbox ── */
         .lightbox {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0,0,0,0.97);
             backdrop-filter: blur(20px);
             z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            animation: fadeIn 0.3s ease-out;
         }
-        
-        .lightbox.active {
-            display: flex;
-        }
-        
+        .lightbox.active { display: flex; animation: fadeIn 0.3s ease-out; }
         .lightbox-content {
             position: relative;
             max-width: 90vw;
             max-height: 90vh;
             animation: fadeInUp 0.4s ease-out;
         }
-        
         .lightbox-content img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border: 2px solid var(--color-accent);
+            border: 1px solid rgba(212,175,55,0.3);
         }
-        
         .lightbox-close {
             position: absolute;
             top: -3rem;
             right: 0;
             background: none;
             border: none;
-            color: var(--color-text);
-            font-size: 2rem;
-            cursor: pointer;
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            cursor: none;
             padding: 0.5rem 1rem;
-            transition: var(--transition);
+            transition: color 0.3s;
             font-family: var(--font-body);
-            font-weight: 200;
         }
-        
-        .lightbox-close:hover {
-            color: var(--color-accent);
-        }
-        
-        /* Movies Section */
+        .lightbox-close:hover { color: var(--color-accent); }
+
+        /* ── Movies ── */
         .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 3rem;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
-        
         .movie-item {
             position: relative;
             aspect-ratio: 16/9;
@@ -306,308 +481,455 @@
             border: 1px solid var(--color-border);
             transition: var(--transition);
         }
-        
-        .movie-item:hover {
-            border-color: var(--color-accent);
-            transform: translateY(-5px);
+        .movie-item::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, var(--color-accent), transparent, var(--color-accent));
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: -1;
         }
-        
-        .movie-item iframe {
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* VanVan Style Section */
+        .movie-item:hover { border-color: rgba(212,175,55,0.4); transform: translateY(-6px); box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+        .movie-item iframe { width: 100%; height: 100%; border: none; }
+
+        /* ── Style section ── */
         .style {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1410 50%, #0a0a0a 100%);
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(212,175,55,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(212,175,55,0.04) 0%, transparent 60%),
+                var(--color-bg);
             text-align: center;
         }
-        
         .style-content {
-            max-width: 800px;
+            max-width: 780px;
             margin: 0 auto;
-            padding: 4rem 2rem;
         }
-        
         .style-quote {
             font-family: var(--font-display);
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-size: clamp(1.4rem, 3.5vw, 2.2rem);
             font-weight: 300;
             font-style: italic;
-            line-height: 1.6;
-            color: var(--color-accent);
+            line-height: 1.7;
+            color: var(--color-text);
             margin-bottom: 2rem;
             position: relative;
+            padding: 2rem 0;
         }
-        
-        .style-quote::before {
-            content: '"';
+        .style-quote::before, .style-quote::after {
+            content: '';
             position: absolute;
-            top: -2rem;
-            left: -1rem;
-            font-size: 6rem;
-            opacity: 0.2;
-            font-family: var(--font-display);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 1px;
+            background: var(--color-accent);
         }
-        
+        .style-quote::before { top: 0; }
+        .style-quote::after { bottom: 0; }
         .style-description {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 300;
-            line-height: 2;
+            line-height: 2.2;
             color: var(--color-text-muted);
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
+            margin-bottom: 3rem;
         }
-        
         .style-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             justify-content: center;
-            margin-top: 3rem;
         }
-        
         .style-tag {
-            padding: 0.75rem 2rem;
-            border: 1px solid var(--color-accent);
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
+            padding: 0.6rem 1.8rem;
+            border: 1px solid rgba(212,175,55,0.4);
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
             font-weight: 300;
+            color: var(--color-text-muted);
             transition: var(--transition);
+            cursor: none;
         }
-        
         .style-tag:hover {
             background: var(--color-accent);
             color: var(--color-bg);
+            border-color: var(--color-accent);
         }
-        
-        /* Footer */
+
+        /* ── Footer ── */
         footer {
-            padding: 5rem 5%;
+            padding: 4rem 5%;
             text-align: center;
             border-top: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
         }
-        
+        footer::before {
+            content: 'ばんばん';
+            position: absolute;
+            font-family: var(--font-display);
+            font-size: 12rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.01);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            pointer-events: none;
+            letter-spacing: 0.1em;
+        }
         footer p {
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
+            font-size: 0.7rem;
+            letter-spacing: 0.35em;
             text-transform: uppercase;
             color: var(--color-text-muted);
             font-weight: 200;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            header {
-                padding: 1.5rem 5%;
-            }
-            
-            .logo {
-                font-size: 1.2rem;
-                letter-spacing: 0.2em;
-            }
-            
-            section {
-                padding: 4rem 5%;
-            }
-            
-            .section-title {
-                margin-bottom: 3rem;
-            }
-            
-            .profile-grid,
-            .gallery-grid,
-            .movies-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .style-quote::before {
-                font-size: 4rem;
-                top: -1.5rem;
-                left: -0.5rem;
-            }
-            
-            .lightbox-close {
-                top: -2.5rem;
-                font-size: 1.5rem;
-            }
+            position: relative;
         }
     </style>
 </head>
 <body>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- Scroll Progress -->
+    <div id="scroll-progress"></div>
+
     <!-- Header -->
-    <header>
-        <div class="logo animate-in">ばんばん</div>
+    <header id="header">
+        <a href="#" class="logo">ばんばん</a>
+        <nav>
+            <a href="#profile">Profile</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#movies">Movies</a>
+            <a href="#style">Style</a>
+        </nav>
     </header>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <video class="hero-bg" autoplay muted loop playsinline>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <video class="hero-video" id="hero-video" autoplay muted loop playsinline>
             <source src="images/nemunemu.MP4" type="video/mp4">
         </video>
-        <div class="hero-content">
-            <h1 class="animate-in delay-1">ばんばん</h1>
-            <p class="hero-subtitle animate-in delay-2">Timeless Elegance in Black</p>
+        <div class="hero-overlay"></div>
+        <canvas id="hero-canvas"></canvas>
+
+        <div class="hero-content" id="hero-content">
+            <p class="hero-eyebrow">Black Toy Poodle</p>
+            <h1 class="hero-title" id="hero-title"></h1>
+            <div class="hero-divider"></div>
+            <p class="hero-subtitle">Timeless Elegance in Black</p>
+        </div>
+
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
         </div>
     </section>
-    
-    <!-- Profile Section -->
-    <section id="profile" class="profile">
-        <h2 class="section-title">Profile</h2>
+
+    <!-- Profile -->
+    <section id="profile">
+        <p class="section-label reveal">About</p>
+        <h2 class="section-title reveal">Profile</h2>
+        <div class="section-line reveal"></div>
         <div class="profile-grid">
-            <div class="profile-item">
+            <div class="profile-item reveal">
                 <div class="profile-label">Name</div>
                 <div class="profile-value">ばんばん</div>
             </div>
-            <div class="profile-item">
+            <div class="profile-item reveal">
                 <div class="profile-label">Breed</div>
                 <div class="profile-value">Toy Poodle</div>
             </div>
-            <div class="profile-item">
+            <div class="profile-item reveal">
                 <div class="profile-label">Color</div>
                 <div class="profile-value">Noir</div>
             </div>
-            <div class="profile-item">
+            <div class="profile-item reveal">
                 <div class="profile-label">Age</div>
                 <div class="profile-value">1 Year</div>
             </div>
-            <div class="profile-item">
+            <div class="profile-item reveal">
                 <div class="profile-label">特技</div>
                 <div class="profile-value">おすわり</div>
             </div>
         </div>
     </section>
-    
-    <!-- Gallery Section -->
+
+    <!-- Gallery -->
     <section id="gallery" class="gallery">
-        <h2 class="section-title">Gallery</h2>
+        <p class="section-label reveal">Photos</p>
+        <h2 class="section-title reveal">Gallery</h2>
+        <div class="section-line reveal"></div>
         <div class="gallery-grid">
-            <div class="gallery-item" data-img="images/01.jpg">
-                <img src="images/01.jpg" alt="VanVan Portrait 1" loading="lazy">
+            <div class="gallery-item reveal" data-img="images/01.jpg">
+                <img src="images/01.jpg" alt="VanVan 01" loading="lazy">
+                <div class="gallery-item-overlay"></div>
+                <span class="gallery-item-num">01</span>
             </div>
-            <div class="gallery-item" data-img="images/02.jpg">
-                <img src="images/02.jpg" alt="VanVan Portrait 2" loading="lazy">
+            <div class="gallery-item reveal" data-img="images/02.jpg">
+                <img src="images/02.jpg" alt="VanVan 02" loading="lazy">
+                <div class="gallery-item-overlay"></div>
+                <span class="gallery-item-num">02</span>
             </div>
-            <div class="gallery-item" data-img="images/03.jpg">
-                <img src="images/03.jpg" alt="VanVan Portrait 3" loading="lazy">
+            <div class="gallery-item reveal" data-img="images/03.jpg">
+                <img src="images/03.jpg" alt="VanVan 03" loading="lazy">
+                <div class="gallery-item-overlay"></div>
+                <span class="gallery-item-num">03</span>
             </div>
-            <div class="gallery-item" data-img="images/04.jpg">
-                <img src="images/04.jpg" alt="VanVan Portrait 4" loading="lazy">
+            <div class="gallery-item reveal" data-img="images/04.jpg">
+                <img src="images/04.jpg" alt="VanVan 04" loading="lazy">
+                <div class="gallery-item-overlay"></div>
+                <span class="gallery-item-num">04</span>
             </div>
-            <div class="gallery-item" data-img="images/05.jpg">
-                <img src="images/05.jpg" alt="VanVan Portrait 5" loading="lazy">
+            <div class="gallery-item reveal" data-img="images/05.jpg">
+                <img src="images/05.jpg" alt="VanVan 05" loading="lazy">
+                <div class="gallery-item-overlay"></div>
+                <span class="gallery-item-num">05</span>
             </div>
-            <div class="gallery-item" data-img="images/06.jpg">
-                <img src="images/06.jpg" alt="VanVan Portrait 6" loading="lazy">
+            <div class="gallery-item reveal" data-img="images/06.jpg">
+                <img src="images/06.jpg" alt="VanVan 06" loading="lazy">
+                <div class="gallery-item-overlay"></div>
+                <span class="gallery-item-num">06</span>
             </div>
         </div>
     </section>
-    
+
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
         <div class="lightbox-content">
-            <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+            <button class="lightbox-close" onclick="closeLightbox()">✕ &nbsp; Close</button>
             <img id="lightbox-img" src="" alt="VanVan">
         </div>
     </div>
-    
-    <!-- Movies Section -->
-    <section id="movies" class="movies">
-        <h2 class="section-title">Movies</h2>
+
+    <!-- Movies -->
+    <section id="movies">
+        <p class="section-label reveal">Moving Pictures</p>
+        <h2 class="section-title reveal">Movies</h2>
+        <div class="section-line reveal"></div>
         <div class="movies-grid">
-            <div class="movie-item">
-                <iframe 
-                    src="https://www.youtube.com/embed/VIDEO_ID_1" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+            <div class="movie-item reveal">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID_1"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
             </div>
-            <div class="movie-item">
-                <iframe 
-                    src="https://www.youtube.com/embed/VIDEO_ID_2" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+            <div class="movie-item reveal">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID_2"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
             </div>
         </div>
     </section>
-    
-    <!-- VanVan Style Section -->
+
+    <!-- Style -->
     <section id="style" class="style">
-        <h2 class="section-title">ばんばん Style</h2>
+        <p class="section-label reveal">Aesthetic</p>
+        <h2 class="section-title reveal">ばんばん Style</h2>
+        <div class="section-line reveal"></div>
         <div class="style-content">
-            <blockquote class="style-quote">
-                Small in stature, immense in presence. ばんばん embodies the essence of refined elegance wrapped in midnight silk.
+            <blockquote class="style-quote reveal">
+                Small in stature, immense in presence.<br>
+                ばんばん embodies the essence of refined elegance<br>wrapped in midnight silk.
             </blockquote>
-            <p class="style-description">
-                A vision of sophistication with curls as dark as a starless night. 
-                ばんばん moves through the world with the quiet confidence of timeless luxury, 
+            <p class="style-description reveal">
+                A vision of sophistication with curls as dark as a starless night.<br>
+                ばんばん moves through the world with the quiet confidence of timeless luxury,<br>
                 each gesture a study in grace, each glance an invitation to wonder.
             </p>
-            <div class="style-tags">
+            <div class="style-tags reveal">
                 <span class="style-tag">Elegant</span>
                 <span class="style-tag">Playful</span>
                 <span class="style-tag">Refined</span>
                 <span class="style-tag">Charismatic</span>
+                <span class="style-tag">Noir</span>
             </div>
         </div>
     </section>
-    
+
     <!-- Footer -->
     <footer>
-        <p>© 2026 ばんばん — A Legacy of Elegance</p>
+        <p>© 2026 &nbsp; ばんばん &nbsp; — &nbsp; A Legacy of Elegance</p>
     </footer>
-    
+
     <script>
-        // Lightbox functionality
-        const galleryItems = document.querySelectorAll('.gallery-item');
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        
-        galleryItems.forEach(item => {
+    (() => {
+        /* ── Custom Cursor ── */
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+        let mx = -100, my = -100, rx = -100, ry = -100;
+
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx + 'px';
+            dot.style.top  = my + 'px';
+        });
+        (function animRing() {
+            rx += (mx - rx) * 0.12;
+            ry += (my - ry) * 0.12;
+            ring.style.left = rx + 'px';
+            ring.style.top  = ry + 'px';
+            requestAnimationFrame(animRing);
+        })();
+
+        /* ── Scroll Progress ── */
+        const bar = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+            bar.style.width = pct + '%';
+        }, { passive: true });
+
+        /* ── Header on scroll ── */
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 60);
+        }, { passive: true });
+
+        /* ── Hero title: char split ── */
+        const text = 'ばんばん';
+        const titleEl = document.getElementById('hero-title');
+        [...text].forEach((ch, i) => {
+            const span = document.createElement('span');
+            span.classList.add('char');
+            span.textContent = ch;
+            span.style.animationDelay = (0.8 + i * 0.15) + 's';
+            titleEl.appendChild(span);
+        });
+        setTimeout(() => titleEl.classList.add('animate'), 100);
+
+        /* ── Canvas Particles ── */
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let W, H, particles = [];
+
+        function resizeCanvas() {
+            W = canvas.width = canvas.offsetWidth;
+            H = canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() { this.reset(true); }
+            reset(init = false) {
+                this.x = Math.random() * W;
+                this.y = init ? Math.random() * H : H + 10;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = Math.random() * 0.6 + 0.2;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.6 + 0.1;
+                this.pulse = Math.random() * Math.PI * 2;
+                this.pulseSpeed = Math.random() * 0.02 + 0.005;
+            }
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                this.pulse += this.pulseSpeed;
+                if (this.y < -10) this.reset();
+            }
+            draw() {
+                const alpha = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = '#d4af37';
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = 'rgba(212,175,55,0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+        function animParticles() {
+            ctx.clearRect(0, 0, W, H);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animParticles);
+        }
+        animParticles();
+
+        /* ── Hero Mouse Parallax ── */
+        const heroContent = document.getElementById('hero-content');
+        const heroVideo   = document.getElementById('hero-video');
+        let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+
+        document.getElementById('hero').addEventListener('mousemove', e => {
+            const { clientX: x, clientY: y, currentTarget: el } = e;
+            const cx = el.offsetWidth / 2, cy = el.offsetHeight / 2;
+            targetX = (x - cx) / cx;
+            targetY = (y - cy) / cy;
+        });
+        document.getElementById('hero').addEventListener('mouseleave', () => {
+            targetX = 0; targetY = 0;
+        });
+        (function animParallax() {
+            currentX += (targetX - currentX) * 0.05;
+            currentY += (targetY - currentY) * 0.05;
+            heroContent.style.transform = `translate(${currentX * 12}px, ${currentY * 8}px)`;
+            heroVideo.style.transform   = `translate(${currentX * -6}px, ${currentY * -4}px) scale(1.05)`;
+            requestAnimationFrame(animParallax);
+        })();
+
+        /* ── Intersection Observer: reveal ── */
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    // stagger siblings
+                    const siblings = [...entry.target.parentElement.querySelectorAll('.reveal')];
+                    const idx = siblings.indexOf(entry.target);
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, idx * 80);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(el => observer.observe(el));
+
+        /* ── Gallery 3D Tilt ── */
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('mousemove', e => {
+                const rect = item.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width  - 0.5;
+                const y = (e.clientY - rect.top)  / rect.height - 0.5;
+                item.style.transform = `perspective(600px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg) translateZ(8px)`;
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = '';
+                item.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1), border-color 0.4s, box-shadow 0.4s';
+            });
+            item.addEventListener('mouseenter', () => {
+                item.style.transition = 'transform 0.1s, border-color 0.4s, box-shadow 0.4s';
+            });
+        });
+
+        /* ── Lightbox ── */
+        document.querySelectorAll('.gallery-item').forEach(item => {
             item.addEventListener('click', () => {
-                const imgSrc = item.getAttribute('data-img');
-                lightboxImg.src = imgSrc;
-                lightbox.classList.add('active');
+                document.getElementById('lightbox-img').src = item.getAttribute('data-img');
+                document.getElementById('lightbox').classList.add('active');
                 document.body.style.overflow = 'hidden';
             });
         });
-        
-        function closeLightbox() {
-            lightbox.classList.remove('active');
+        window.closeLightbox = () => {
+            document.getElementById('lightbox').classList.remove('active');
             document.body.style.overflow = '';
-        }
-        
-        // Close lightbox on background click
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
+        };
+        document.getElementById('lightbox').addEventListener('click', e => {
+            if (e.target === document.getElementById('lightbox')) closeLightbox();
         });
-        
-        // Close lightbox on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-                closeLightbox();
-            }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeLightbox();
         });
-        
-        // Smooth scroll for internal links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+
+    })();
     </script>
 </body>
 </html>
