@@ -139,6 +139,27 @@
 
         @media (max-width: 768px) { nav { display: none; } }
 
+        /* ── Fixed BG Video ── */
+        #bg-video-fixed {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        #bg-video-fixed video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.8) contrast(1.1);
+        }
+        #bg-video-fixed-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 30%, rgba(10,10,10,0.5) 100%),
+                linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.6) 100%);
+        }
+
         /* ── Hero ── */
         .hero {
             position: relative;
@@ -147,23 +168,6 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-        }
-        .hero-video {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.8) contrast(1.1);
-            transform-origin: center;
-            will-change: transform;
-        }
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse at center, transparent 30%, rgba(10,10,10,0.6) 100%),
-                linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.7) 100%);
         }
         #hero-canvas {
             position: absolute;
@@ -363,30 +367,9 @@
         /* ── Gallery ── */
         .gallery {
             padding: 0;
-            overflow: hidden;
-        }
-        .gallery-bg-sticky {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            margin-bottom: -100vh;
-            overflow: hidden;
-            z-index: 0;
-        }
-        .gallery-bg-sticky video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.8) contrast(1.1);
-        }
-        .gallery-bg-sticky-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(10, 10, 10, 0.55);
         }
         .gallery-content {
             position: relative;
-            z-index: 1;
             padding: clamp(5rem, 12vh, 10rem) 5%;
         }
         .gallery-grid {
@@ -617,6 +600,14 @@
 </head>
 <body>
 
+    <!-- Fixed Background Video -->
+    <div id="bg-video-fixed">
+        <video autoplay muted loop playsinline>
+            <source src="images/munku.MOV" type="video/mp4">
+        </video>
+        <div id="bg-video-fixed-overlay"></div>
+    </div>
+
     <!-- Custom Cursor -->
     <div id="cursor-dot"></div>
     <div id="cursor-ring"></div>
@@ -637,10 +628,6 @@
 
     <!-- Hero -->
     <section class="hero" id="hero">
-        <video class="hero-video" id="hero-video" autoplay muted loop playsinline>
-            <source src="images/munku.MOV" type="video/mp4">
-        </video>
-        <div class="hero-overlay"></div>
         <canvas id="hero-canvas"></canvas>
 
         <div class="hero-content" id="hero-content">
@@ -687,15 +674,6 @@
 
     <!-- Gallery -->
     <section id="gallery" class="gallery">
-        <!-- Sticky video background -->
-        <div class="gallery-bg-sticky">
-            <video autoplay muted loop playsinline>
-                <source src="images/munku.MOV" type="video/mp4">
-            </video>
-            <div class="gallery-bg-sticky-overlay"></div>
-        </div>
-
-        <!-- Gallery content on top -->
         <div class="gallery-content">
             <p class="section-label reveal">Photos</p>
             <h2 class="section-title reveal">Gallery</h2>
@@ -892,7 +870,6 @@
 
         /* ── Hero Mouse Parallax ── */
         const heroContent = document.getElementById('hero-content');
-        const heroVideo   = document.getElementById('hero-video');
         let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
 
         document.getElementById('hero').addEventListener('mousemove', e => {
@@ -908,7 +885,6 @@
             currentX += (targetX - currentX) * 0.05;
             currentY += (targetY - currentY) * 0.05;
             heroContent.style.transform = `translate(${currentX * 12}px, ${currentY * 8}px)`;
-            heroVideo.style.transform   = `translate(${currentX * -6}px, ${currentY * -4}px) scale(1.05)`;
             requestAnimationFrame(animParallax);
         })();
 
