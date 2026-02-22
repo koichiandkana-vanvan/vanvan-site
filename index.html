@@ -476,15 +476,17 @@
 
         /* ── Movies ── */
         .movies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 3rem;
             max-width: 1100px;
             margin: 0 auto;
         }
         .movie-item {
             position: relative;
-            aspect-ratio: 16/9;
+            width: 360px;
+            aspect-ratio: 9/16;
             overflow: hidden;
             border: 1px solid var(--color-border);
             transition: var(--transition);
@@ -728,12 +730,7 @@
         <div class="section-line reveal"></div>
         <div class="movies-grid">
             <div class="movie-item reveal">
-                <iframe src="https://www.youtube.com/embed/VIDEO_ID_1"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-            </div>
-            <div class="movie-item reveal">
-                <iframe src="https://www.youtube.com/embed/VIDEO_ID_2"
+                <iframe src="https://www.youtube.com/embed/1LatbvMWWNo"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
             </div>
