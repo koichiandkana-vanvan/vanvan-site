@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanVan — Timeless Elegance</title>
     <link rel="icon" href="images/06.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="images/06.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -139,6 +140,12 @@
         nav a:hover::after { width: 100%; }
 
         @media (max-width: 768px) { nav { display: none; } }
+
+        /* ── Touch device: hide custom cursor ── */
+        @media (pointer: coarse) {
+            body { cursor: auto; }
+            #cursor-dot, #cursor-ring { display: none; }
+        }
 
         /* ── Fixed BG Video ── */
         #bg-video-fixed {
@@ -611,7 +618,7 @@
 
     <!-- Fixed Background Video -->
     <div id="bg-video-fixed">
-        <video autoplay muted loop playsinline>
+        <video autoplay muted loop playsinline webkit-playsinline preload="auto" id="bg-video">
             <source src="images/munku.MOV" type="video/mp4">
         </video>
         <div id="bg-video-fixed-overlay"></div>
@@ -919,6 +926,14 @@
             if (e.key === 'Escape') closeLightbox();
         });
 
+    })();
+
+    /* ── iOS: bg video autoplay recovery ── */
+    (() => {
+        const vid = document.getElementById('bg-video');
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && vid.paused) vid.play().catch(() => {});
+        });
     })();
 
     /* ── Favicon: crop face area ── */
