@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanVan — Timeless Elegance</title>
-    <link rel="icon" href="images/06.jpg" type="image/jpeg">
-    <link rel="apple-touch-icon" href="images/06.jpg">
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -936,24 +936,6 @@
         });
     })();
 
-    /* ── Favicon: crop face area ── */
-    (() => {
-        const img = new Image();
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 64;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            // 顔部分: 横中央、縦は上から15%〜65%あたりをクロップ
-            const sw = img.width * 0.22;
-            const sh = img.height * 0.2;
-            const sx = (img.width - sw) / 2;
-            const sy = img.height * 0.1;
-            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, 64, 64);
-            document.querySelector('link[rel="icon"]').href = canvas.toDataURL('image/png');
-        };
-        img.src = 'images/06.jpg';
-    })();
     </script>
 </body>
 </html>
