@@ -139,7 +139,59 @@
         nav a:hover { color: var(--color-accent); }
         nav a:hover::after { width: 100%; }
 
-        @media (max-width: 768px) { nav { display: none; } }
+        /* ── Hamburger ── */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 110;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--color-text);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+        @media (max-width: 768px) {
+            nav {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(10, 10, 10, 0.97);
+                backdrop-filter: blur(20px);
+                justify-content: center;
+                align-items: center;
+                z-index: 105;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+            nav.open {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            nav a {
+                font-size: 1.2rem;
+                letter-spacing: 0.4em;
+                padding: 1.2rem 0;
+                cursor: auto;
+            }
+            .hamburger { display: flex; }
+        }
 
         /* ── Touch device: hide custom cursor ── */
         @media (pointer: coarse) {
@@ -596,11 +648,14 @@
     <!-- Header -->
     <header id="header">
         <a href="#" class="logo">ばんばん</a>
-        <nav>
+        <nav id="nav">
             <a href="#profile">Profile</a>
             <a href="#gallery">Gallery</a>
             <a href="#movies">Movies</a>
         </nav>
+        <button class="hamburger" id="hamburger" aria-label="メニュー">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
     <!-- Hero -->
@@ -851,6 +906,22 @@
             });
         });
 
+    })();
+
+    /* ── Hamburger menu ── */
+    (() => {
+        const btn = document.getElementById('hamburger');
+        const nav = document.getElementById('nav');
+        btn.addEventListener('click', () => {
+            btn.classList.toggle('open');
+            nav.classList.toggle('open');
+        });
+        nav.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                btn.classList.remove('open');
+                nav.classList.remove('open');
+            });
+        });
     })();
 
     /* ── iOS: bg video autoplay recovery ── */
