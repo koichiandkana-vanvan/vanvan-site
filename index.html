@@ -221,6 +221,31 @@
             border-color: var(--color-accent);
         }
 
+        /* ── BGM Toast ── */
+        #bgm-toast {
+            position: fixed;
+            bottom: 5rem;
+            right: 2rem;
+            z-index: 200;
+            background: rgba(10, 10, 10, 0.85);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            color: var(--color-accent);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.4s, transform 0.4s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        #bgm-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* ── Touch device: hide custom cursor ── */
         @media (pointer: coarse) {
             body { cursor: auto; }
@@ -670,6 +695,7 @@
     <audio id="bgm" loop preload="auto">
         <source src="audio/bgm.mp3" type="audio/mpeg">
     </audio>
+    <div id="bgm-toast">♫ タップしてBGM開始</div>
     <button id="bgm-btn" aria-label="BGM toggle" title="BGM">
         <svg id="bgm-icon-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
@@ -954,6 +980,7 @@
     (() => {
         const audio = document.getElementById('bgm');
         const btn   = document.getElementById('bgm-btn');
+        const toast = document.getElementById('bgm-toast');
         const iconOn  = document.getElementById('bgm-icon-on');
         const iconOff = document.getElementById('bgm-icon-off');
         audio.volume = 0.3;
@@ -965,23 +992,37 @@
             iconOff.style.display = playing ? 'none' : '';
         }
 
-        // 最初のインタラクションで自動再生
+        function hideToast() {
+            toast.classList.remove('show');
+        }
+
+        // ページロード後にトーストを表示（スマホのみ）
+        if ('ontouchstart' in window) {
+            setTimeout(() => {
+                toast.classList.add('show');
+                setTimeout(hideToast, 4000);
+            }, 1500);
+        }
+
+        // 最初のインタラクションで自動再生（touchendはiOSで確実）
         function tryStart() {
             if (started) return;
             started = true;
+            hideToast();
             audio.play().then(() => setPlaying(true)).catch(() => {});
-            document.removeEventListener('click', tryStart);
-            document.removeEventListener('touchstart', tryStart);
         }
         document.addEventListener('click', tryStart, { once: true });
-        document.addEventListener('touchstart', tryStart, { once: true });
+        document.addEventListener('touchend', tryStart, { once: true });
 
         // ボタンでON/OFF
         btn.addEventListener('click', e => {
             e.stopPropagation();
+            if (!started) {
+                started = true;
+                hideToast();
+            }
             if (audio.paused) {
                 audio.play().then(() => setPlaying(true)).catch(() => {});
-                started = true;
             } else {
                 audio.pause();
                 setPlaying(false);
