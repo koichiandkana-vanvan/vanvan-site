@@ -193,6 +193,34 @@
             .hamburger { display: flex; }
         }
 
+        /* ── BGM Button ── */
+        #bgm-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 200;
+            background: rgba(10, 10, 10, 0.7);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: var(--color-text-muted);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.3s, color 0.3s;
+            backdrop-filter: blur(8px);
+        }
+        #bgm-btn:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+        #bgm-btn.playing {
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
         /* ── Touch device: hide custom cursor ── */
         @media (pointer: coarse) {
             body { cursor: auto; }
@@ -638,6 +666,20 @@
         <div id="bg-video-fixed-overlay"></div>
     </div>
 
+    <!-- BGM -->
+    <audio id="bgm" loop preload="auto">
+        <source src="audio/bgm.mp3" type="audio/mpeg">
+    </audio>
+    <button id="bgm-btn" aria-label="BGM toggle" title="BGM">
+        <svg id="bgm-icon-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+        </svg>
+        <svg id="bgm-icon-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+            <line x1="2" y1="2" x2="22" y2="22"/>
+        </svg>
+    </button>
+
     <!-- Custom Cursor -->
     <div id="cursor-dot"></div>
     <div id="cursor-ring"></div>
@@ -906,6 +948,45 @@
             });
         });
 
+    })();
+
+    /* ── BGM ── */
+    (() => {
+        const audio = document.getElementById('bgm');
+        const btn   = document.getElementById('bgm-btn');
+        const iconOn  = document.getElementById('bgm-icon-on');
+        const iconOff = document.getElementById('bgm-icon-off');
+        audio.volume = 0.3;
+        let started = false;
+
+        function setPlaying(playing) {
+            btn.classList.toggle('playing', playing);
+            iconOn.style.display  = playing ? '' : 'none';
+            iconOff.style.display = playing ? 'none' : '';
+        }
+
+        // 最初のインタラクションで自動再生
+        function tryStart() {
+            if (started) return;
+            started = true;
+            audio.play().then(() => setPlaying(true)).catch(() => {});
+            document.removeEventListener('click', tryStart);
+            document.removeEventListener('touchstart', tryStart);
+        }
+        document.addEventListener('click', tryStart, { once: true });
+        document.addEventListener('touchstart', tryStart, { once: true });
+
+        // ボタンでON/OFF
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            if (audio.paused) {
+                audio.play().then(() => setPlaying(true)).catch(() => {});
+                started = true;
+            } else {
+                audio.pause();
+                setPlaying(false);
+            }
+        });
     })();
 
     /* ── Hamburger menu ── */
