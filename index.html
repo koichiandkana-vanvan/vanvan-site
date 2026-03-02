@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanVan — Timeless Elegance</title>
+    <meta name="description" content="黒トイプードル「ばんばん」の公式サイト。Timeless Elegance in Black.">
+
+    <!-- OGP -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://koichiandkana-vanvan.github.io/vanvan-site/">
+    <meta property="og:title" content="VanVan — Timeless Elegance">
+    <meta property="og:description" content="黒トイプードル「ばんばん」の公式サイト。Timeless Elegance in Black.">
+    <meta property="og:image" content="https://koichiandkana-vanvan.github.io/vanvan-site/images/01.jpg">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="VanVan — Timeless Elegance">
+    <meta name="twitter:description" content="黒トイプードル「ばんばん」の公式サイト。Timeless Elegance in Black.">
+    <meta name="twitter:image" content="https://koichiandkana-vanvan.github.io/vanvan-site/images/01.jpg">
+
     <link rel="icon" href="images/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -762,8 +778,12 @@
                 <div class="profile-value">Noir</div>
             </div>
             <div class="profile-item reveal">
+                <div class="profile-label">Birthday</div>
+                <div class="profile-value">Feb 28, 2025</div>
+            </div>
+            <div class="profile-item reveal">
                 <div class="profile-label">Age</div>
-                <div class="profile-value">1 Year</div>
+                <div class="profile-value" id="profile-age">1 Year</div>
             </div>
             <div class="profile-item reveal">
                 <div class="profile-label">特技</div>
@@ -1044,6 +1064,20 @@
                 nav.classList.remove('open');
             });
         });
+    })();
+
+    /* ── Profile Age: dynamic calculation ── */
+    (() => {
+        const el = document.getElementById('profile-age');
+        if (!el) return;
+        const birth = new Date(2025, 1, 28); // Feb 28, 2025
+        const now = new Date();
+        let years = now.getFullYear() - birth.getFullYear();
+        const hasBirthdayPassed =
+            now.getMonth() > birth.getMonth() ||
+            (now.getMonth() === birth.getMonth() && now.getDate() >= birth.getDate());
+        if (!hasBirthdayPassed) years--;
+        el.textContent = years === 0 ? 'Under 1 Year' : years === 1 ? '1 Year' : years + ' Years';
     })();
 
     /* ── iOS: bg video autoplay recovery ── */
