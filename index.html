@@ -665,6 +665,94 @@
             border-color: var(--color-accent);
         }
 
+        /* ── Goods ── */
+        .goods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .goods-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .goods-card:hover {
+            border-color: rgba(212,175,55,0.5);
+            transform: translateY(-6px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+        .goods-card-img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.95);
+            transition: filter 0.4s;
+        }
+        .goods-card:hover .goods-card-img { filter: brightness(1.05); }
+        .goods-card-body {
+            padding: 1.6rem;
+        }
+        .goods-card-brand {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+        .goods-card-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--color-text);
+            margin-bottom: 0.8rem;
+        }
+        .goods-card-desc {
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            letter-spacing: 0.04em;
+            margin-bottom: 1.2rem;
+        }
+        .goods-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .goods-card-price {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.05em;
+        }
+        .goods-card-btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border: 1px solid rgba(212,175,55,0.5);
+            color: var(--color-accent);
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: none;
+        }
+        .goods-card-btn:hover {
+            background: var(--color-accent);
+            color: var(--color-bg);
+        }
+        .goods-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: rgba(136,136,136,0.6);
+            letter-spacing: 0.06em;
+            margin-top: 3rem;
+        }
+
         /* ── Footer ── */
         footer {
             padding: 4rem 5%;
@@ -736,6 +824,7 @@
             <a href="#profile">Profile</a>
             <a href="#gallery">Gallery</a>
             <a href="#movies">Movies</a>
+            <a href="#goods">Goods</a>
         </nav>
         <button class="hamburger" id="hamburger" aria-label="メニュー">
             <span></span><span></span><span></span>
@@ -838,6 +927,28 @@
                     allowfullscreen></iframe>
             </div>
         </div>
+    </section>
+
+    <!-- Goods -->
+    <section id="goods">
+        <p class="section-label reveal">Lifestyle</p>
+        <h2 class="section-title reveal">Goods</h2>
+        <div class="section-line reveal"></div>
+        <div class="goods-grid">
+            <div class="goods-card reveal">
+                <img class="goods-card-img" src="images/lead-and-collar.jpg" alt="首輪 & リード by ciiron TOKYO">
+                <div class="goods-card-body">
+                    <p class="goods-card-brand">ciiron TOKYO</p>
+                    <p class="goods-card-name">首輪 &amp; リード</p>
+                    <p class="goods-card-desc">黒い毛並みに映える鮮やかなイエロー。<br>反射材入りで暗い場所でも安心の視認性。</p>
+                    <div class="goods-card-footer">
+                        <span class="goods-card-price">Set — ¥10,000前後</span>
+                        <a href="#" class="goods-card-btn">Shop</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="goods-note">※ 掲載リンクはアフィリエイトリンクを含む場合があります</p>
     </section>
 
     <!-- Footer -->
