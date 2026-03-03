@@ -685,9 +685,6 @@
             transform: translateY(-6px);
             box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
-        .goods-card-img-wrap {
-            position: relative;
-        }
         .goods-card-img {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -696,18 +693,16 @@
             filter: brightness(0.95);
             transition: filter 0.4s;
         }
+        .goods-card-btn-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.3rem;
+        }
         .goods-card-ad {
-            position: absolute;
-            bottom: 0.6rem;
-            right: 0.6rem;
-            background: rgba(10,10,10,0.7);
-            color: rgba(212,175,55,0.7);
             font-size: 0.6rem;
             letter-spacing: 0.1em;
-            padding: 0.2rem 0.5rem;
-            border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 2px;
-            backdrop-filter: blur(4px);
+            color: rgba(136,136,136,0.5);
         }
         .goods-card:hover .goods-card-img { filter: brightness(1.05); }
         .goods-card-body {
@@ -952,17 +947,17 @@
         <div class="section-line reveal"></div>
         <div class="goods-grid">
             <div class="goods-card reveal">
-                <div class="goods-card-img-wrap">
-                    <img class="goods-card-img" src="images/lead-and-collar.jpg" alt="首輪 & リード by ciiron TOKYO">
-                    <span class="goods-card-ad">#AD</span>
-                </div>
+                <img class="goods-card-img" src="images/lead-and-collar.jpg" alt="首輪 & リード by ciiron TOKYO">
                 <div class="goods-card-body">
                     <p class="goods-card-brand">ciiron TOKYO</p>
                     <p class="goods-card-name">首輪 &amp; リード</p>
                     <p class="goods-card-desc">黒い毛並みに映える鮮やかなイエロー。<br>反射材入りで暗い場所でも安心の視認性。</p>
                     <div class="goods-card-footer">
                         <span class="goods-card-price">¥4,750〜（税込・送料無料）</span>
-                        <a href="https://hb.afl.rakuten.co.jp/ichiba/517f2649.cc42fd17.517f264a.51475b40/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fciirontokyo%2Fleash02%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoiZG93biIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjowLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9" target="_blank" rel="nofollow sponsored noopener" class="goods-card-btn">楽天で見る</a>
+                        <div class="goods-card-btn-wrap">
+                            <a href="https://hb.afl.rakuten.co.jp/ichiba/517f2649.cc42fd17.517f264a.51475b40/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fciirontokyo%2Fleash02%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoiZG93biIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjowLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9" target="_blank" rel="nofollow sponsored noopener" class="goods-card-btn">楽天で見る</a>
+                            <span class="goods-card-ad">#AD</span>
+                        </div>
                     </div>
                 </div>
             </div>
